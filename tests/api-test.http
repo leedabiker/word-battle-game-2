@@ -1,0 +1,33 @@
+@baseUrl = http://localhost:8000
+#@uuid = {{$uuid}}
+@player_name = player-{{$guid}}
+
+################################################################################
+### 1) create a room ───────────────────────────────────────────────────────────
+# @name createRoom 
+POST {{baseUrl}}/room/create
+Content-Type: application/json
+
+{
+  "player_name": "{{player_name}}"
+}
+
+###
+@player2_name = player-{{$guid}}
+
+################################################################################
+### 2) use the JSONPath reference directly (needs request 1 sent first)
+POST {{baseUrl}}/room/join/{{createRoom.response.body.$.room_code}}
+Content-Type: application/json
+
+{
+  "player_name": "{{player2_name}}"
+}
+
+################################################################################
+### 3) or capture it as a file variable for reuse
+@roomCode = {{createRoom.response.body.$.room_code}}
+
+# @name getRoom
+GET {{baseUrl}}/room/{{roomCode}}
+

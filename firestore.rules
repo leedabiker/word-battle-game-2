@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Allow read/write access to all documents in the 'rooms' collection
+    match /rooms/{roomId} {
+      allow read, write: if true;  // (open during dev MVP)
+    }
+    
+    // Deny access to everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
